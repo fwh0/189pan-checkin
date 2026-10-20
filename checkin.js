@@ -1,6 +1,13 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const dns = require("node:dns");
 const { CloudClient, FileTokenStore } = require("cloud189-sdk");
+
+dns.setDefaultResultOrder("ipv4first");
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function splitValues(value) {
   return String(value || "")
@@ -58,21 +65,42 @@ async function main() {
         throw new Error("没有可用的密码或 SSON Cookie");
       }
 
-      const options = {
-        token: new FileTokenStore(
-          path.join(".token", `${safeFileName(username)}.json`),
-        ),
+      const makeOptions = () => {
+        const options = {
+          token: new FileTokenStore(
+            path.join(".token", `${safeFileName(username)}.json`),
+          ),
+        };
+        if (sson) {
+          options.ssonCookie = sson;
+        } else {
+          options.username = username;
+          options.password = password;
+        }
+        return options;
       };
-      if (sson) {
-        options.ssonCookie = sson;
-      } else {
-        options.username = username;
-        options.password = password;
-      }
 
-      const client = new CloudClient(options);
-      await client.getSession();
-      const result = await client.userSign();
+      let result;
+      let lastError;
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        try {
+          const client = new CloudClient(makeOptions());
+          await client.getSession();
+          result = await client.userSign();
+          break;
+        } catch (error) {
+          lastError = error;
+          console.error(
+            `账户${index + 1} 第${attempt}次连接失败: ${formatError(error)}`,
+          );
+          if (attempt < 3) {
+            await sleep(attempt * 5000);
+          }
+        }
+      }
+      if (!result) {
+        throw lastError;
+      }
       const bonus = Number(result.netdiskBonus || 0);
       if (result.isSign) {
         lines.push(`- 签到结果：今天已经签到过，获得 ${bonus}M 空间`);
