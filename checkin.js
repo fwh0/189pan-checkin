@@ -82,7 +82,7 @@ async function main() {
 
       let result;
       let lastError;
-      for (let attempt = 1; attempt <= 3; attempt += 1) {
+      for (let attempt = 1; attempt <= 8; attempt += 1) {
         try {
           const client = new CloudClient(makeOptions());
           await client.getSession();
@@ -94,7 +94,7 @@ async function main() {
             `账户${index + 1} 第${attempt}次连接失败: ${formatError(error)}`,
           );
           if (attempt < 3) {
-            await sleep(attempt * 5000);
+            await sleep(30000);
           }
         }
       }
