@@ -46,6 +46,7 @@ jobs:
         run: node checkin.js
 
       - name: Commit result
+        if: success()
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "🤖 自动签到更新"
