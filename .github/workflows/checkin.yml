@@ -4,8 +4,8 @@ on:
   schedule:
     # UTC 01:07 = 北京时间 09:07（避开整点高负载）
     - cron: "7 1 * * *"
-    # UTC 10:07 = 北京时间 18:07（避开整点高负载）
-    - cron: "7 10 * * *"
+    # UTC 09:07 = 北京时间 17:07（避开整点高负载）
+    - cron: "7 9 * * *"
   workflow_dispatch:
 
 permissions:
