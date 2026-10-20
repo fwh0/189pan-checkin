@@ -1,8 +1,6 @@
 # 天翼云盘自动签到
 
-这是一个独立的 GitHub 仓库，用于运行天翼云盘自动签到，并把结果发布到 GitHub Pages。
 
-本项目刻意没有使用 Fork，因为 GitHub 对 Fork 仓库的 `schedule` 定时任务有额外限制；独立仓库的定时工作流更可靠。
 
 ## 功能
 
@@ -14,7 +12,7 @@
 
 ## 来源与引用
 
-本项目不是原仓库的 Fork，签到逻辑和接口使用参考了以下公开项目：
+本项目签到逻辑和接口使用参考了以下公开项目：
 
 - [zzifan1/189pan1](https://github.com/zzifan1/189pan1)：原始天翼云盘签到项目
 - [q952417961/189pan](https://github.com/q952417961/189pan)：本项目迁移前的 Fork 仓库
@@ -37,7 +35,7 @@
 多个账号用 `&` 分隔，顺序要一一对应，例如：
 
 ```text
-TYYP_USERNAME=13800000001&13800000002
+TYYP_USERNAME=1xxxxxxxxxx&1yyyyyyyyyy
 TYYP_PSW=密码1&密码2
 ```
 
