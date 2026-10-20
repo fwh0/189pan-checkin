@@ -1,0 +1,12 @@
+{
+  "name": "189pan-checkin",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Tianyi Cloud auto check-in",
+  "scripts": {
+    "checkin": "node checkin.js"
+  },
+  "dependencies": {
+    "cloud189-sdk": "^1.0.9"
+  }
+}
