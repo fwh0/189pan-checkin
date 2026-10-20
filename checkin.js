@@ -93,7 +93,7 @@ async function main() {
           console.error(
             `账户${index + 1} 第${attempt}次连接失败: ${formatError(error)}`,
           );
-          if (attempt < 3) {
+          if (attempt < 8) {
             await sleep(30000);
           }
         }
@@ -115,6 +115,10 @@ async function main() {
   }
 
   lines.push("---", "", `成功账户：${successful}/${usernames.length}`, "");
+  if (successful === 0) {
+    console.error(lines.join("\n"));
+    throw new Error("所有账户签到失败，保留上次成功记录");
+  }
   const output = lines.join("\n");
   fs.writeFileSync("index.md", output, "utf8");
   console.log(output);
@@ -122,10 +126,5 @@ async function main() {
 
 main().catch((error) => {
   console.error(formatError(error));
-  fs.writeFileSync(
-    "index.md",
-    `# 天翼云盘签到记录\n\n签到程序异常：${formatError(error)}\n`,
-    "utf8",
-  );
-  process.exitCode = 0;
+  process.exitCode = 1;
 });
